@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <style>
+        body {
+            text-align: center;
+            background: linear-gradient(to bottom, #f77062, #fe5196);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            perspective: 800px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            margin: 10px;
+            transition: 0.3s;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        #yesBtn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        #noBtn {
+            background: #F44336;
+            color: white;
+        }
+
+        #decorateBtn {
+            background: #FF9800;
+            color: white;
+        }
+
+        #lightsBtn {
+            background: #9C27B0;
+            color: white;
+        }
+
+        .balloons {
+            position: absolute;
+            width: 80px;
+            height: 120px;
+            background: radial-gradient(circle, #f00, #800);
+            border-radius: 50%;
+            bottom: -120px;
+            animation: float 7s infinite ease-in-out;
+            opacity: 0.8;
+        }
+
+        .balloon-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://cdn.pixabay.com/photo/2012/04/05/01/41/balloon-25739_640.png"); /* Replace with your balloon image URL */
+            background-size: cover;
+        }
+
+        .lights {
+            width: 100%;
+            height: 60px;
+            position: fixed;
+            top: 0;
+            background: url('https://cdn.pixabay.com/photo/2019/12/17/08/44/star-4701122_640.jpg'); /* Use your lights image */
+            background-size: contain;
+            animation: blink 1s infinite alternate;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .card {
+            width: 350px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.9);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+            opacity: 0;
+            transform-style: preserve-3d;
+            z-index: 2; /* Ensure card is above gift box */
+        }
+
+        .card-content {
+            transform: rotateX(-10deg) translateZ(50px);
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .card:hover .card-content {
+            transform: rotateX(-5deg) translateZ(70px);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-250px) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.7;
+            }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: gold;
+            top: -10px;
+            animation: confetti-fall 3s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                top: -10px;
+                opacity: 0;
+                transform: rotate(0deg);
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+                transform: rotate(360deg);
+            }
+        }
+
+        .gift-box {
+            width: 150px;
+            height: 150px;
+            position: absolute; /* Changed to absolute */
+            bottom: 20px;     /* Position at bottom */
+            left: 50%;        /* Center horizontally */
+            transform: translateX(-50%); /* Adjust for centering */
+            transform-style: preserve-3d;
+            animation: rotate-gift 5s linear infinite;
+            margin-top: 0;  /* Remove margin */
+        }
+
+        .gift-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #f00;
+            border: 5px solid #fff;
+            transform: translateZ(75px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: white;
+            backface-visibility: hidden;
+        }
+
+        .gift-side {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-color: #f00;
+            border: 5px solid #fff;
+            transform-origin: left;
+            backface-visibility: hidden;
+        }
+
+        .gift-side-left {
+            transform: rotateY(90deg) translateZ(75px);
+        }
+
+        .gift-side-right {
+            transform: rotateY(-90deg) translateZ(75px);
+        }
+
+        .gift-side-top {
+            transform: rotateX(90deg) translateZ(75px);
+        }
+
+        .gift-side-bottom {
+            transform: rotateX(-90deg) translateZ(75px);
+        }
+
+        @keyframes rotate-gift {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h1>Happy Birthday! 🎉</h1>
+    <button id="yesBtn" class="btn">Yes</button>
+    <button id="noBtn" class="btn">No</button>
+    <button id="decorateBtn" class="btn hidden">Decorate</button>
+    <button id="lightsBtn" class="btn hidden">Lights On</button>
+    <div class="lights hidden"></div>
+    <div class="card hidden">
+        <div class="card-content">
+            🎂 Happy Birthday! Wishing you all the joy in the world! 🎁
+        </div>
+    </div>
+    <div class="gift-box">
+        <div class="gift-face">🎁</div>
+        <div class="gift-side gift-side-left"></div>
+        <div class="gift-side gift-side-right"></div>
+        <div class="gift-side gift-side-top"></div>
+        <div class="gift-side gift-side-bottom"></div>
+    </div>
+
+    <script>
+        document.getElementById('yesBtn').addEventListener('click', function () {
+            this.style.display = 'none';
+            document.getElementById('noBtn').style.display = 'none';
+            document.getElementById('decorateBtn').classList.remove('hidden');
+        });
+
+        document.getElementById('decorateBtn').addEventListener('click', function () {
+            this.style.display = 'none';
+            document.getElementById('lightsBtn').classList.remove('hidden');
+
+            for (let i = 0; i < 10; i++) {
+                let balloon = document.createElement('div');
+                balloon.className = 'balloons';
+                balloon.innerHTML = '<div class="balloon-image"></div>';
+                balloon.style.left = Math.random() * window.innerWidth + 'px';
+                balloon.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(balloon);
+            }
+        });
+
+        document.getElementById('lightsBtn').addEventListener('click', function () {
+            this.style.display = 'none';
+            const lights = document.querySelector('.lights');
+            lights.classList.remove('hidden');
+            setTimeout(() => {
+                lights.style.opacity = 1;
+
+                const card = document.querySelector('.card');
+                card.classList.remove('hidden');
+                card.style.opacity = 0;
+                card.style.transform = 'translate(-50%, -50%) scale(0.5)';
+
+                setTimeout(() => {
+                    card.style.opacity = 1;
+                    card.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 500);
+            }, 500);
+
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.backgroundColor = getRandomColor();
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                document.body.appendChild(confetti);
+            }
+        });
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+
+</html>
